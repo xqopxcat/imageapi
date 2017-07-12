@@ -1,7 +1,6 @@
 # imageapi
 
-```diff
-- Require: python 2.7
+Require: python 2.7
 
 ```
 > npm install
