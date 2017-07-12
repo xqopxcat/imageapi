@@ -4,6 +4,6 @@ Require: python 2.7
 
 ```
 > npm install
-> npm start
+> node server.js
 ```
-# localhost:3000
+localhost:3000
