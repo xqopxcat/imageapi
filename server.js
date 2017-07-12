@@ -7,7 +7,9 @@ var path = require('path');
 var fs = require('fs');
 var sharp = require('sharp');
 var request = require('request');
+var cors = require('cors');
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/uploads'));
 app.use(express.static(__dirname + '/resize'));
