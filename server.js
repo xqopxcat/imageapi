@@ -17,12 +17,13 @@ app.use(express.static(__dirname + '/resize'));
 var HEX_NUMBERS = {
 	jpg: 'ffd8ffe0',
 	jpg1: 'ffd8ffe1',
+	jpeg: 'ffd8ffe2',
 	png: '89504e47',
 	gif: '47494638'
 }
 
 function checkHexNumbers(hex) {
-	if (hex == HEX_NUMBERS.jpg || hex == HEX_NUMBERS.jpg1 || hex == HEX_NUMBERS.png || hex == HEX_NUMBERS.gif) 
+	if (hex == HEX_NUMBERS.jpg || hex == HEX_NUMBERS.jpg1 || hex == HEX_NUMBERS.jpeg || hex == HEX_NUMBERS.png || hex == HEX_NUMBERS.gif) 
 		return true
 }
 
