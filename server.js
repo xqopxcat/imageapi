@@ -67,7 +67,7 @@ app.post("/api/uploadurl", function(req, res){
 	});
 	var imageName = req.body.imageUrl.substr(req.body.imageUrl.lastIndexOf('/')+1);
 	var imageExtName = imageName.substr(imageName.lastIndexOf('.')).toLowerCase(); 
-	console.log(imageName, imageExtName);
+
 	if(imageExtName == '.png' || imageExtName == '.jpg' || imageExtName == '.jpeg' || imageExtName == '.gif'){
 		download(req.body.imageUrl, nowTime + '_' + imageName, function(){
 			return res.json({
