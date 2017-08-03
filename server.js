@@ -7,12 +7,14 @@ var path = require('path');
 var fs = require('fs');
 var sharp = require('sharp');
 var request = require('request');
+var cv = require('opencv');
 var cors = require('cors');
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/uploads'));
 app.use(express.static(__dirname + '/resize'));
+app.use(express.static(__dirname + '/img'));
 
 var HEX_NUMBERS = {
 	jpg: 'ffd8ffe0',
@@ -131,6 +133,51 @@ app.get("/api/getimage/:name", function(req, res){
 			});
 		})
 	}
+})
+
+app.post("/api/getdetection/:name", function(req, res){
+	cv.readImage('./uploads/' + req.params.name, function (err, img) {  
+	  if (err) {
+	    throw err;
+	  }
+	  const width = img.width();
+	  const height = img.height();
+
+	  if (width < 1 || height < 1) {
+	    throw new Error('Image has no size');
+	  }
+	  let diagonal = Math.round(Math.sqrt(Math.pow(img.size()[1], 2) + Math.pow(img.size()[0], 2)));
+	  const lowThresh = req.body.low;
+	  const highThresh = req.body.high;
+	  const iterations = 2;
+	  const thickness = 1;
+	  const lineType = 8;
+
+	  const GREEN = [0, 255, 0];
+	  if(req.body.grascale){
+		img.convertGrayscale();
+	  }
+	  img.gaussianBlur([9,9]);
+
+	  img.canny(lowThresh, highThresh);
+	  img.dilate(iterations);
+
+	  let largestContourImg = new cv.Matrix(height, width);
+	  let largestArea = 500;
+	  let largestAreaIndex;
+	  let contours = img.findContours();
+	  for (let i = 0; i < contours.size(); i++) {
+	    if (contours.area(i) > largestArea) {
+	      largestContourImg.drawContour(contours, i, GREEN, thickness, lineType);
+	    }
+	  }
+
+	  largestContourImg.save('./img/' + req.body.low + '-' + req.body.high + '-' + req.params.name);
+	  return res.json({
+			    message: 'OK',
+			    filename:  + req.body.low + '-' + req.body.high + '-' + req.params.name
+		});
+	});
 })
 
 
