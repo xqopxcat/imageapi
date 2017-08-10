@@ -1,6 +1,6 @@
 # imageapi
 
-Require: python 2.7
+Require: python 2.7, OpenCV
 
 ```
 > npm install
